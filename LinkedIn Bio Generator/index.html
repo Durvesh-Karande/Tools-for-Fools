@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Bio Generator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        :root {
+            --bg:        #F2F2F7;
+            --card:      #FFFFFF;
+            --label-1:   #1C1C1E;
+            --label-2:   #6E6E73;
+            --label-3:   #AEAEB2;
+            --separator: #E5E5EA;
+            --accent:    #0077B5;
+            --blue:      #007AFF;
+            --green:     #34C759;
+            --red:       #FF3B30;
+            --r-xl:      22px;
+            --r-lg:      16px;
+            --r-md:      12px;
+            --shadow:    0 2px 8px rgba(0,0,0,.06), 0 8px 28px rgba(0,0,0,.07);
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 48px 20px 80px;
+            color: var(--label-1);
+        }
+
+        /* ── Header ───────────────────────────────────── */
+        .page-header {
+            display: flex; align-items: center; gap: 18px;
+            max-width: 660px; margin: 0 auto 32px;
+        }
+
+        .app-icon {
+            width: 64px; height: 64px; border-radius: 18px;
+            background: linear-gradient(145deg, #0A96E0, #0077B5);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 4px 16px rgba(0,119,181,.35);
+            flex-shrink: 0;
+        }
+
+        .page-header-text h1 { font-size: 1.75em; font-weight: 700; letter-spacing: -.5px; }
+        .page-header-text p  { font-size: .9em; color: var(--label-2); margin-top: 2px; }
+
+        .ai-badge {
+            margin-left: auto;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, #0077B5, #0A96E0);
+            color: white; font-size: .72em; font-weight: 700;
+            padding: 5px 12px; border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,119,181,.3);
+            flex-shrink: 0;
+        }
+
+        /* ── Card ─────────────────────────────────────── */
+        .card {
+            background: var(--card);
+            border-radius: var(--r-xl);
+            padding: 26px 24px;
+            box-shadow: var(--shadow);
+            max-width: 660px;
+            margin: 0 auto 20px;
+        }
+
+        .card-title { font-size: 1.0em; font-weight: 700; letter-spacing: -.3px; margin-bottom: 18px; }
+
+        /* ── Tone pills ───────────────────────────────── */
+        .tone-row {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+
+        .tone-pill {
+            padding: 7px 16px; border-radius: 20px;
+            border: 1.5px solid var(--separator);
+            font-size: .82em; font-weight: 600; font-family: inherit;
+            cursor: pointer; background: transparent; color: var(--label-2);
+            transition: all .15s;
+        }
+
+        .tone-pill.selected {
+            background: var(--accent); color: white; border-color: transparent;
+            box-shadow: 0 2px 8px rgba(0,119,181,.3);
+        }
+
+        /* ── Input group ──────────────────────────────── */
+        .input-group { margin-bottom: 16px; }
+
+        .input-label {
+            font-size: .78em; font-weight: 700; color: var(--label-2);
+            text-transform: uppercase; letter-spacing: .4px;
+            display: block; margin-bottom: 7px;
+        }
+
+        .text-input, .text-area {
+            width: 100%; padding: 12px 14px;
+            border: 1.5px solid var(--separator); border-radius: var(--r-md);
+            font-size: .92em; font-family: inherit; color: var(--label-1);
+            background: var(--bg); outline: none; transition: border-color .18s;
+        }
+
+        .text-input:focus, .text-area:focus { border-color: var(--accent); }
+        .text-input::placeholder, .text-area::placeholder { color: var(--label-3); }
+
+        .text-area { min-height: 90px; resize: vertical; line-height: 1.55; }
+
+        /* 2-col grid */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        /* Tags input */
+        .tags-wrap {
+            display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+            padding: 10px 12px; min-height: 46px;
+            border: 1.5px solid var(--separator); border-radius: var(--r-md);
+            background: var(--bg); cursor: text; transition: border-color .18s;
+        }
+
+        .tags-wrap:focus-within { border-color: var(--accent); }
+
+        .tag-chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(0,119,181,.1); color: var(--accent);
+            font-size: .78em; font-weight: 700;
+            padding: 3px 10px 3px 10px; border-radius: 20px;
+        }
+
+        .tag-chip button {
+            background: none; border: none; cursor: pointer;
+            color: var(--accent); font-size: 1em; line-height: 1;
+            padding: 0; display: flex; align-items: center;
+        }
+
+        .tag-input {
+            border: none; background: transparent; outline: none;
+            font-size: .88em; font-family: inherit; color: var(--label-1);
+            min-width: 120px; flex: 1;
+        }
+
+        .tag-input::placeholder { color: var(--label-3); }
+
+        /* ── Generate button ──────────────────────────── */
+        .generate-btn {
+            width: 100%; padding: 14px;
+            background: var(--accent); color: white;
+            border: none; border-radius: var(--r-md);
+            font-size: 1em; font-weight: 700; font-family: inherit;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: filter .18s, transform .18s;
+            letter-spacing: -.2px;
+        }
+
+        .generate-btn:hover:not(:disabled) { filter: brightness(.88); transform: translateY(-1px); }
+        .generate-btn:disabled { opacity: .45; cursor: default; transform: none; }
+
+        .spinner {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(255,255,255,.35);
+            border-top-color: white; border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Result ───────────────────────────────────── */
+        #result { display: none; }
+
+        /* Variant tabs */
+        .variant-tabs {
+            display: flex; gap: 6px; margin-bottom: 18px;
+            background: var(--bg); border-radius: var(--r-md); padding: 4px;
+        }
+
+        .variant-tab {
+            flex: 1; padding: 8px; border: none; border-radius: 10px;
+            font-size: .8em; font-weight: 600; font-family: inherit;
+            cursor: pointer; background: transparent; color: var(--label-2);
+            transition: all .18s;
+        }
+
+        .variant-tab.active {
+            background: var(--card);
+            color: var(--label-1);
+            box-shadow: 0 1px 4px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.07);
+        }
+
+        /* Bio output */
+        .bio-output {
+            background: var(--bg);
+            border-radius: var(--r-md);
+            padding: 18px 16px;
+            font-size: .92em;
+            line-height: 1.75;
+            color: var(--label-1);
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 120px;
+        }
+
+        .bio-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 12px;
+        }
+
+        .char-pill {
+            font-size: .75em; font-weight: 600; color: var(--label-3);
+            background: var(--separator); padding: 3px 10px; border-radius: 12px;
+        }
+
+        .char-pill.over { color: var(--red); background: rgba(255,59,48,.12); }
+
+        /* Action row */
+        .action-row { display: flex; gap: 10px; margin-top: 14px; }
+
+        .action-btn {
+            flex: 1; padding: 11px;
+            border: 1.5px solid var(--separator); border-radius: var(--r-md);
+            font-size: .85em; font-weight: 700; font-family: inherit;
+            cursor: pointer; background: var(--bg); color: var(--label-2);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all .15s;
+        }
+
+        .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .action-btn.copied { border-color: var(--green); color: var(--green); background: rgba(52,199,89,.07); }
+
+        /* Tips */
+        .tip-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .tip-item {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 11px 14px; background: var(--bg); border-radius: var(--r-md);
+        }
+
+        .tip-icon { font-size: 1.1em; flex-shrink: 0; margin-top: 1px; }
+        .tip-text { font-size: .85em; color: var(--label-1); line-height: 1.55; }
+        .tip-text strong { font-weight: 700; }
+
+        /* Error */
+        .error-box {
+            background: rgba(255,59,48,.08); border: 1.5px solid rgba(255,59,48,.2);
+            border-radius: var(--r-md); padding: 12px 16px;
+            font-size: .88em; color: var(--red);
+            display: none; margin-top: 12px;
+        }
+
+        /* Back */
+        .back-link { text-align: center; margin-top: 8px; }
+        .back-link a { color: var(--blue); text-decoration: none; font-size: .88em; font-weight: 500; }
+
+        @media (max-width: 500px) {
+            .two-col { grid-template-columns: 1fr; }
+            .card { padding: 20px 16px; }
+            .ai-badge { display: none; }
+            .action-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="page-header">
+    <div class="app-icon">💼</div>
+    <div class="page-header-text">
+        <h1>LinkedIn Bio Generator</h1>
+        <p>Craft a standout About section in seconds</p>
+    </div>
+</header>
+
+<!-- Form -->
+<div class="card">
+    <div class="card-title">About You</div>
+
+    <div class="two-col">
+        <div class="input-group">
+            <label class="input-label">Full Name</label>
+            <input class="text-input" id="fullName" placeholder="Alex Johnson" oninput="checkReady()">
+        </div>
+        <div class="input-group">
+            <label class="input-label">Current Role / Title</label>
+            <input class="text-input" id="jobTitle" placeholder="Product Designer at Apple" oninput="checkReady()">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Industry / Domain</label>
+        <input class="text-input" id="industry" placeholder="e.g. SaaS, FinTech, Healthcare, Marketing…" oninput="checkReady()">
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Years of Experience</label>
+        <input class="text-input" id="experience" type="number" min="0" max="50" placeholder="e.g. 7" oninput="checkReady()">
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Key Skills (press Enter or comma to add)</label>
+        <div class="tags-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
+            <input class="tag-input" id="tagInput" placeholder="e.g. React, Leadership, Data Analysis…"
+                onkeydown="handleTagKey(event)" oninput="checkReady()">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Top Achievements / Impact (optional)</label>
+        <textarea class="text-area" id="achievements"
+            placeholder="e.g. Led a team of 12, grew revenue by 40%, launched 3 products used by 1M+ users…"></textarea>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Tone</label>
+        <div class="tone-row" id="tonePills">
+            <button class="tone-pill selected" data-tone="Professional">🤝 Professional</button>
+            <button class="tone-pill" data-tone="Friendly">😊 Friendly</button>
+            <button class="tone-pill" data-tone="Bold">🔥 Bold</button>
+            <button class="tone-pill" data-tone="Creative">🎨 Creative</button>
+            <button class="tone-pill" data-tone="Minimalist">✦ Minimalist</button>
+        </div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <button class="generate-btn" id="generateBtn" onclick="generate()" disabled>
+        <span id="btnText">Generate Bio</span>
+    </button>
+</div>
+
+<!-- Result -->
+<div id="result">
+    <div class="card">
+        <div class="card-title">Your LinkedIn Bio</div>
+
+        <div class="variant-tabs" id="variantTabs">
+            <button class="variant-tab active" onclick="switchVariant(0, this)">Version 1</button>
+            <button class="variant-tab"        onclick="switchVariant(1, this)">Version 2</button>
+            <button class="variant-tab"        onclick="switchVariant(2, this)">Version 3</button>
+        </div>
+
+        <div class="bio-output" id="bioOutput"></div>
+
+        <div class="bio-meta">
+            <div class="char-pill" id="charPill">0 / 2600 chars</div>
+        </div>
+
+        <div class="action-row">
+            <button class="action-btn" id="copyBtn" onclick="copyBio()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy
+            </button>
+            <button class="action-btn" onclick="generate()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
+                </svg>
+                Regenerate
+            </button>
+        </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="card">
+        <div class="card-title">LinkedIn Bio Tips</div>
+        <div class="tip-list">
+            <div class="tip-item"><div class="tip-icon">📏</div><div class="tip-text"><strong>Keep it under 2,600 characters</strong> — LinkedIn's About section limit.</div></div>
+            <div class="tip-item"><div class="tip-icon">🪝</div><div class="tip-text"><strong>Hook in the first line</strong> — only the first 2–3 lines show before "see more".</div></div>
+            <div class="tip-item"><div class="tip-icon">🔍</div><div class="tip-text"><strong>Use keywords</strong> from your industry so recruiters can find you in search.</div></div>
+            <div class="tip-item"><div class="tip-icon">🎯</div><div class="tip-text"><strong>End with a CTA</strong> — invite people to connect, email, or visit your site.</div></div>
+        </div>
+    </div>
+</div>
+
+<div class="back-link"><a href="../Tools%20for%20fools.html">← Back to Tools for Fools</a></div>
+
+<script>
+    const GROQ_KEY = 'YOUR_GROQ_API_KEY_HERE';
+    const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+    let tags = [];
+    let variants = ['', '', ''];
+    let currentVariant = 0;
+    let selectedTone = 'Professional';
+
+    /* ── Tags ─────────────────────────────────────────── */
+    function handleTagKey(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const val = e.target.value.replace(',', '').trim();
+            if (val && !tags.includes(val)) {
+                tags.push(val);
+                renderTags();
+            }
+            e.target.value = '';
+        } else if (e.key === 'Backspace' && e.target.value === '' && tags.length) {
+            tags.pop();
+            renderTags();
+        }
+        checkReady();
+    }
+
+    function renderTags() {
+        const wrap = document.getElementById('tagsWrap');
+        const input = document.getElementById('tagInput');
+        wrap.querySelectorAll('.tag-chip').forEach(t => t.remove());
+        tags.forEach((t, i) => {
+            const chip = document.createElement('div');
+            chip.className = 'tag-chip';
+            chip.innerHTML = `${escHtml(t)}<button onclick="removeTag(${i})">×</button>`;
+            wrap.insertBefore(chip, input);
+        });
+        checkReady();
+    }
+
+    function removeTag(i) {
+        tags.splice(i, 1);
+        renderTags();
+    }
+
+    /* ── Tone pills ───────────────────────────────────── */
+    document.getElementById('tonePills').addEventListener('click', e => {
+        const pill = e.target.closest('.tone-pill');
+        if (!pill) return;
+        document.querySelectorAll('.tone-pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        selectedTone = pill.dataset.tone;
+    });
+
+    /* ── Ready check ──────────────────────────────────── */
+    function checkReady() {
+        const name  = document.getElementById('fullName').value.trim();
+        const title = document.getElementById('jobTitle').value.trim();
+        const ind   = document.getElementById('industry').value.trim();
+        document.getElementById('generateBtn').disabled = !(name && title && ind);
+    }
+
+    /* ── Generate ─────────────────────────────────────── */
+    async function generate() {
+        const name         = document.getElementById('fullName').value.trim();
+        const title        = document.getElementById('jobTitle').value.trim();
+        const industry     = document.getElementById('industry').value.trim();
+        const experience   = document.getElementById('experience').value.trim();
+        const skills       = tags.join(', ') || document.getElementById('tagInput').value.trim();
+        const achievements = document.getElementById('achievements').value.trim();
+
+        setLoading(true);
+        document.getElementById('errorBox').style.display = 'none';
+
+        const prompt = `Write 3 different LinkedIn "About" section bios for the following person. Each version should have a distinct opening hook and style but all should match the requested tone.
+
+Name: ${name}
+Title: ${title}
+Industry: ${industry}
+${experience ? `Years of Experience: ${experience}` : ''}
+${skills ? `Key Skills: ${skills}` : ''}
+${achievements ? `Achievements: ${achievements}` : ''}
+Tone: ${selectedTone}
+
+Rules:
+- Each bio is 150–300 words
+- Written in first person
+- Start with a compelling hook (not "I am a...")
+- Include skills, impact, and a call-to-action at the end
+- Keep under 2600 characters per bio
+- Do NOT number the bios with "1." or "2." — use the exact separators below
+
+Respond ONLY with this exact format (no extra text, no markdown):
+BIO_1_START
+[first bio here]
+BIO_1_END
+BIO_2_START
+[second bio here]
+BIO_2_END
+BIO_3_START
+[third bio here]
+BIO_3_END`;
+
+        try {
+            const res = await fetch(GROQ_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GROQ_KEY}`
+                },
+                body: JSON.stringify({
+                    model: 'llama-3.3-70b-versatile',
+                    temperature: 0.8,
+                    max_tokens: 2048,
+                    messages: [
+                        { role: 'system', content: 'You are an expert LinkedIn profile writer. Respond exactly as instructed — no markdown, no extra commentary.' },
+                        { role: 'user', content: prompt }
+                    ]
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error?.message || `API error ${res.status}`);
+            }
+
+            const data = await res.json();
+            const raw  = data.choices?.[0]?.message?.content || '';
+
+            // Parse 3 bios
+            const parse = (n) => {
+                const re = new RegExp(`BIO_${n}_START\\s*([\\s\\S]*?)\\s*BIO_${n}_END`);
+                const m = raw.match(re);
+                return m ? m[1].trim() : '';
+            };
+
+            variants = [parse(1), parse(2), parse(3)];
+
+            if (!variants[0]) throw new Error('Unexpected response format. Please try again.');
+
+            currentVariant = 0;
+            document.querySelectorAll('.variant-tab').forEach((t, i) => t.classList.toggle('active', i === 0));
+            showVariant(0);
+
+            document.getElementById('result').style.display = 'block';
+            setTimeout(() => document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+        } catch (e) {
+            const box = document.getElementById('errorBox');
+            box.textContent = '⚠️ ' + (e.message || 'Something went wrong. Please try again.');
+            box.style.display = 'block';
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function switchVariant(i, btn) {
+        currentVariant = i;
+        document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        showVariant(i);
+        resetCopy();
+    }
+
+    function showVariant(i) {
+        const bio = variants[i] || '';
+        document.getElementById('bioOutput').textContent = bio;
+        const len = bio.length;
+        const pill = document.getElementById('charPill');
+        pill.textContent = `${len.toLocaleString()} / 2,600 chars`;
+        pill.classList.toggle('over', len > 2600);
+    }
+
+    function copyBio() {
+        const bio = variants[currentVariant];
+        if (!bio) return;
+        navigator.clipboard.writeText(bio).then(() => {
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('copied');
+            btn.querySelector('svg').style.display = 'none';
+            btn.childNodes[btn.childNodes.length - 1].textContent = ' Copied!';
+            setTimeout(() => resetCopy(), 2500);
+        });
+    }
+
+    function resetCopy() {
+        const btn = document.getElementById('copyBtn');
+        btn.classList.remove('copied');
+        btn.querySelector('svg').style.display = '';
+        btn.childNodes[btn.childNodes.length - 1].textContent = ' Copy';
+    }
+
+    function setLoading(on) {
+        const btn = document.getElementById('generateBtn');
+        btn.disabled = on;
+        btn.innerHTML = on
+            ? '<div class="spinner"></div><span>Generating…</span>'
+            : '<span id="btnText">Generate Bio</span>';
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+</script>
+</body>
+</html>
