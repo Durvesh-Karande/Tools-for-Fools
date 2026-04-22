@@ -26,7 +26,10 @@
       "Bash(python3 update_document_formatting_standards.py)",
       "Bash(python3 fix_document_formatting_syntax.py)",
       "Bash(python3 restore_and_style_documents.py)",
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "Bash(python fix_back_links.py)",
+      "Bash(find . -name \"index.html\" -exec grep -l 'onclick=\"generate\\(\\)\"' {} \\\\;)",
+      "Bash(find . -type f -name \"*.html\" -exec grep -l \"console\\\\|catch.*generateDocument\\\\|try.*generateDocument\" {} \\\\;)"
     ]
   }
 }
