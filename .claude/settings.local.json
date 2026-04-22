@@ -29,7 +29,16 @@
       "Bash(awk '{print $NF}')",
       "Bash(python fix_back_links.py)",
       "Bash(find . -name \"index.html\" -exec grep -l 'onclick=\"generate\\(\\)\"' {} \\\\;)",
-      "Bash(find . -type f -name \"*.html\" -exec grep -l \"console\\\\|catch.*generateDocument\\\\|try.*generateDocument\" {} \\\\;)"
+      "Bash(find . -type f -name \"*.html\" -exec grep -l \"console\\\\|catch.*generateDocument\\\\|try.*generateDocument\" {} \\\\;)",
+      "Bash(gh repo *)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/Durvesh-Karande/Tools-for-Fools/main/index.html\")",
+      "Bash(curl -s \"https://durvesh-karande.github.io/Tools-for-Fools/index.html\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://durvesh-karande.github.io/Tools-for-Fools/Project%20Managers/Project%20Manager%20Tools/Business%20Case%20Builder/index.html\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://durvesh-karande.github.io/Tools-for-Fools/Project%20Manager%20Tools/Business%20Case%20Builder/index.html\")",
+      "Bash(curl -s \"https://api.github.com/repos/Durvesh-Karande/Tools-for-Fools/contents/\")",
+      "Bash(curl -s \"https://github.com/Durvesh-Karande/Tools-for-Fools/tree/main\")",
+      "Bash(find \"Project Managers/Project Manager Tools\" -name \"index.html\" -exec grep -l \"../../index.html\" {} \\\\;)",
+      "Bash(find \"Project Managers/Project Manager Tools\" -name \"index.html\" -exec sed -i \"s|../../index.html|../../../index.html|g\" {} \\\\;)"
     ]
   }
 }
