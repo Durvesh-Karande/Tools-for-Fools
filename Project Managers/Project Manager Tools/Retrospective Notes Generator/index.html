@@ -290,6 +290,36 @@
             document.getElementById('result').style.display = 'none';
         }
 
+        // Wrapper functions to match HTML button calls
+        function generate() {
+            generateDocument();
+        }
+
+        function dlpdf() {
+            downloadPDF();
+        }
+
+        function dlexcel() {
+            try {
+                const { utils, writeFile } = window.XLSX;
+                const projectName = (document.getElementById('projectName')?.value || '') || 'Document';
+                const data = [];
+                document.querySelectorAll('input, textarea').forEach(el => {
+                    if (el.id && el.value) {
+                        const label = document.querySelector(`label[for="${el.id}"]`)?.textContent || el.id;
+                        data.push({ Field: label.replace(' *', ''), Value: el.value });
+                    }
+                });
+                const ws = utils.json_to_sheet(data);
+                const wb = utils.book_new();
+                utils.book_append_sheet(wb, ws, 'Retrospective');
+                writeFile(wb, projectName + '_Retrospective.xlsx');
+            } catch (e) {
+                console.error('Excel export error:', e);
+                alert('Could not download Excel. Please try again.');
+            }
+        }
+
     </script>
 
     <!-- Smart Recommendations Widget -->
