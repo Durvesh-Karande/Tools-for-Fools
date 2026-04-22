@@ -103,7 +103,64 @@
         body {
             padding-top: 56px;
         }
-</style>
+        .recommendations-widget {
+          margin-top: 48px;
+          padding: 24px;
+          background: var(--bg);
+          border-top: 2px solid var(--separator);
+        }
+
+        .recommendations-container {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        .recommendations-title {
+          font-size: 1.3em;
+          font-weight: 700;
+          margin-bottom: 20px;
+          color: var(--label-1);
+        }
+
+        .recommendations-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px;
+        }
+
+        .recommendation-card {
+          background: var(--card);
+          border: 1px solid var(--separator);
+          border-radius: var(--r-lg);
+          padding: 16px;
+          text-align: center;
+          transition: transform .2s, box-shadow .2s;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .recommendation-card:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow);
+        }
+
+        .recommendation-name {
+          font-weight: 600;
+          font-size: 0.95em;
+          color: var(--label-1);
+        }
+
+        .recommendation-reason {
+          font-size: 0.85em;
+          color: var(--label-2);
+          line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
     <div class="top-nav">
@@ -368,5 +425,20 @@
 
     </script>
 
+    <!-- Smart Recommendations Widget -->
+    <div id="recommendationsWidget" class="recommendations-widget">
+      <div class="recommendations-container">
+        <h3 class="recommendations-title">You Might Also Need...</h3>
+        <div id="recommendationsList" class="recommendations-list"></div>
+      </div>
+    </div>
+
+    <script src="../../recommendationMap.js"></script>
+    <script src="../../recommendationLogic.js"></script>
+    <script>
+      window.addEventListener('load', function() {
+        loadRecommendations('Risk Register Creator');
+      });
+    </script>
 </body>
 </html>
