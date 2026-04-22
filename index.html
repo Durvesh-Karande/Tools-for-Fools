@@ -56,40 +56,109 @@
             letter-spacing: -0.1px;
         }
 
-        /* ── Category nav ────────────────────────────────── */
-        .cat-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        /* ── Header with Tabs and Search ─────────────────── */
+        .header-content {
+            display: block;
             margin-top: 18px;
-            background: var(--card);
-            border-radius: 24px;
-            padding: 5px 6px;
-            box-shadow: var(--shadow);
         }
 
-        .cat-nav-btn {
-            padding: 7px 16px;
+        /* ── Profession Tabs ────────────────────────────── */
+        .prof-tabs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            justify-items: stretch;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 900px) {
+            .prof-tabs {
+                grid-template-columns: repeat(4, minmax(120px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .prof-tabs {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .prof-tabs {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        .prof-tab {
+            padding: 8px 10px;
             border: none;
-            border-radius: 20px;
-            font-size: .82em;
+            border-radius: 14px;
+            font-size: .78em;
             font-weight: 600;
             font-family: inherit;
             cursor: pointer;
-            background: transparent;
+            background: var(--card);
             color: var(--label-2);
             transition: background .2s, color .2s;
             white-space: nowrap;
+            box-shadow: var(--shadow);
+            width: 100%;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .cat-nav-btn:hover {
+        .prof-tab:hover {
             background: var(--bg);
             color: var(--label-1);
         }
 
-        .cat-nav-btn.active {
+        .prof-tab.active {
             background: var(--label-1);
             color: #fff;
+        }
+
+        /* ── Search Bar ────────────────────────────────── */
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border-radius: 18px;
+            padding: 10px 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 750px;
+            margin: 16px auto 0;
+        }
+
+        .search-wrapper svg {
+            width: 16px;
+            height: 16px;
+            color: var(--label-3);
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: .85em;
+            color: var(--label-1);
+            outline: none;
+            width: 100%;
+            padding: 0;
+        }
+
+        .search-input::placeholder {
+            color: var(--label-3);
         }
 
         /* ── Wrapper ─────────────────────────────────────── */
@@ -101,6 +170,17 @@
         /* ── Category section ────────────────────────────── */
         .category {
             margin-bottom: 48px;
+            display: none;
+            animation: fadeIn .3s ease-in;
+        }
+
+        .category.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .category-header {
@@ -266,6 +346,99 @@
         .cat-icon-daily        { background: rgba(90,200,250,.12); }
         .cat-icon-writing      { background: rgba(88,86,214,.12); }
 
+        /* ── Hamburger Menu ──────────────────────────────– */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--card);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            box-shadow: var(--shadow);
+            z-index: 2000;
+            transition: background .2s;
+        }
+
+        .menu-btn:hover {
+            background: var(--bg);
+        }
+
+        .menu-btn span {
+            width: 20px;
+            height: 2px;
+            background: var(--label-1);
+            border-radius: 1px;
+            transition: all .3s;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .dropdown-menu {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            min-width: 200px;
+            overflow: hidden;
+            display: none;
+            z-index: 1999;
+            animation: slideDown .2s ease-out;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 14px 20px;
+            color: var(--label-1);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            border-bottom: 1px solid var(--separator);
+            transition: background .2s;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--bg);
+        }
+
         /* ── Footer ──────────────────────────────────────── */
         .footer {
             text-align: center;
@@ -286,29 +459,55 @@
 </head>
 <body>
 
+    <!-- Hamburger Menu -->
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+        <a href="./Homepage/privacy-policy.html">🔐 Privacy Policy</a>
+        <a href="./Homepage/contact.html">📧 Contact Us</a>
+    </div>
+
     <header class="page-header">
         <h1>Tools for <span>Fools</span></h1>
-        <p>Simple tools to help you stay on track, every day.</p>
-        <div class="cat-nav">
-            <button class="cat-nav-btn active" onclick="jumpTo('productivity', this)">⚡️ Productivity</button>
-            <button class="cat-nav-btn" onclick="jumpTo('health', this)">🌿 Health</button>
-            <button class="cat-nav-btn" onclick="jumpTo('finance', this)">💰 Finance</button>
-            <button class="cat-nav-btn" onclick="jumpTo('daily', this)">🛍️ Daily Life</button>
-            <button class="cat-nav-btn" onclick="jumpTo('writing', this)">✍️ Writing</button>
+        <p>Simple tools for every profession.</p>
+        <div class="header-content">
+            <div class="prof-tabs">
+                <button class="prof-tab active" onclick="showAll()">✨ All Tools</button>
+                <button class="prof-tab" onclick="showProf('general')">👥 General</button>
+                <button class="prof-tab" onclick="showProf('projectmanagers')">📋 Project Managers</button>
+                <button class="prof-tab" onclick="showProf('accountants')">💼 Accountants</button>
+                <button class="prof-tab" onclick="showProf('hrpros')">👔 Human Resources</button>
+                <button class="prof-tab" onclick="showProf('marketing')">📢 Marketing</button>
+                <button class="prof-tab" onclick="showProf('sales')">🤝 Sales</button>
+                <button class="prof-tab" onclick="showProf('lawyers')">⚖️ Lawyers</button>
+                <button class="prof-tab" onclick="showProf('doctors')">🏥 Medical</button>
+                <button class="prof-tab" onclick="showProf('teachers')">🎓 Education</button>
+            </div>
+            <div class="search-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search tools..." onkeyup="searchTools()">
+            </div>
         </div>
     </header>
 
     <div class="wrapper">
 
-        <!-- ── Productivity ─────────────────────────────── -->
-        <section class="category" id="productivity">
+        <!-- ── General Tools (All Pros) ─────────────────── -->
+        <section class="category" id="general">
             <div class="category-header">
-                <div class="category-icon cat-icon-productivity">⚡️</div>
+                <div class="category-icon">👥</div>
                 <div>
-                    <div class="category-label">Productivity</div>
-                    <div class="category-sub">Focus, tasks &amp; goals</div>
+                    <div class="category-label">General Tools</div>
+                    <div class="category-sub">For every professional</div>
                 </div>
-                <div class="category-count">3 tools</div>
+                <div class="category-count">6 tools</div>
             </div>
             <div class="category-divider"></div>
             <div class="grid">
@@ -334,21 +533,19 @@
                     <a class="tool-btn" href="./Goal%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- ── Health & Wellness ────────────────────────── -->
-        <section class="category" id="health">
-            <div class="category-header">
-                <div class="category-icon cat-icon-health">🌿</div>
-                <div>
-                    <div class="category-label">Health &amp; Wellness</div>
-                    <div class="category-sub">Nutrition, hydration &amp; habits</div>
+                <div class="tool-card card-water">
+                    <div class="tool-icon">💧</div>
+                    <div class="tool-name">Water Intake</div>
+                    <div class="tool-desc">Track your daily hydration, hit your water goals, and build a healthy habit one sip at a time.</div>
+                    <a class="tool-btn" href="./Water%20Intake%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
                 </div>
-                <div class="category-count">2 tools</div>
-            </div>
-            <div class="category-divider"></div>
-            <div class="grid">
+
+                <div class="tool-card card-shopping">
+                    <div class="tool-icon">🛒</div>
+                    <div class="tool-name">Shopping List</div>
+                    <div class="tool-desc">Organize your grocery runs by category, check items off, and keep the pantry stocked.</div>
+                    <a class="tool-btn" href="./Shopping%20List/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
 
                 <div class="tool-card card-meal">
                     <div class="tool-icon">🍽️</div>
@@ -357,28 +554,70 @@
                     <a class="tool-btn" href="./Meal%20Planner/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
                 </div>
 
-                <div class="tool-card card-water">
-                    <div class="tool-icon">💧</div>
-                    <div class="tool-name">Water Intake</div>
-                    <div class="tool-desc">Track your daily hydration, hit your water goals, and build a healthy habit one sip at a time.</div>
-                    <a class="tool-btn" href="./Water%20Intake%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+        </section>
+
+        <!-- ── Project Managers ─────────────────────────── -->
+        <section class="category" id="projectmanagers">
+            <div class="category-header">
+                <div class="category-icon">📋</div>
+                <div>
+                    <div class="category-label">Project Managers</div>
+                    <div class="category-sub">Planning, tracking &amp; execution</div>
                 </div>
+                <div class="category-count">24 tools</div>
+            </div>
+            <div class="category-divider"></div>
+            <div class="grid">
+
+                <div class="tool-card"><div class="tool-icon">📋</div><div class="tool-name">Project Charter</div><div class="tool-desc">Create project charters with objectives and scope.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Project%20Charter%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📊</div><div class="tool-name">Business Case</div><div class="tool-desc">Build compelling business cases for project funding.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Business%20Case%20Builder/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📝</div><div class="tool-name">SOW Statement</div><div class="tool-desc">Generate detailed Statements of Work for projects.</div><a class="tool-btn" href="./Project%20Manager%20Tools/SOW%20Statement%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📋</div><div class="tool-name">PM Plan</div><div class="tool-desc">Create comprehensive project management plans.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Project%20Management%20Plan%20Creator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🎯</div><div class="tool-name">Scope Statement</div><div class="tool-desc">Define detailed project scope and exclusions.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Scope%20Statement%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🌳</div><div class="tool-name">WBS Builder</div><div class="tool-desc">Create work breakdown structures visually.</div><a class="tool-btn" href="./Project%20Manager%20Tools/WBS%20Builder/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📅</div><div class="tool-name">Schedule Generator</div><div class="tool-desc">Plan project timelines with milestones.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Project%20Schedule%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">💰</div><div class="tool-name">Budget & Cost</div><div class="tool-desc">Create detailed budget and cost plans.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Budget%20%26%20Cost%20Plan%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">⚠️</div><div class="tool-name">Risk Register</div><div class="tool-desc">Identify and manage project risks.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Risk%20Register%20Creator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">👥</div><div class="tool-name">Stakeholder Register</div><div class="tool-desc">Manage stakeholder engagement and communication.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Stakeholder%20Register%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">💬</div><div class="tool-name">Communication Plan</div><div class="tool-desc">Build comprehensive communication strategies.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Communication%20Plan%20Builder/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📊</div><div class="tool-name">RACI Matrix</div><div class="tool-desc">Clarify roles and responsibilities.</div><a class="tool-btn" href="./Project%20Manager%20Tools/RACI%20Matrix%20Creator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🎯</div><div class="tool-name">Kickoff Deck</div><div class="tool-desc">Create project kickoff presentations.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Kickoff%20Deck%20Outline/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📝</div><div class="tool-name">Meeting Minutes</div><div class="tool-desc">Record and track meeting outcomes.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Meeting%20Minutes%20Template/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📊</div><div class="tool-name">Weekly Status</div><div class="tool-desc">Generate weekly project status reports.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Weekly%20Status%20Report%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">⚠️</div><div class="tool-name">Issue Log</div><div class="tool-desc">Track and manage project issues.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Issue%20Log%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">✅</div><div class="tool-name">Decision Log</div><div class="tool-desc">Record and track project decisions.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Decision%20Log%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📋</div><div class="tool-name">Change Request</div><div class="tool-desc">Manage scope change requests.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Change%20Request%20Form/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🏃</div><div class="tool-name">Sprint Planning</div><div class="tool-desc">Plan sprints with goals and user stories.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Sprint%20Planning%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🔄</div><div class="tool-name">Retrospective</div><div class="tool-desc">Capture sprint retrospective insights.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Retrospective%20Notes%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">✔️</div><div class="tool-name">Closure Report</div><div class="tool-desc">Document project completion.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Project%20Closure%20Report/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📚</div><div class="tool-name">Lessons Learned</div><div class="tool-desc">Document project lessons and best practices.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Lessons%20Learned%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📦</div><div class="tool-name">Handover</div><div class="tool-desc">Create project handover documentation.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Handover%20Document%20Creator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">📋</div><div class="tool-name">Post-Impl Review</div><div class="tool-desc">Evaluate implementation success.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Post-Implementation%20Review%20Tool/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
+                <div class="tool-card"><div class="tool-icon">🚀</div><div class="tool-name">Escalation Matrix</div><div class="tool-desc">Create escalation paths for issues.</div><a class="tool-btn" href="./Project%20Manager%20Tools/Escalation%20Matrix%20Builder/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a></div>
 
             </div>
         </section>
 
-        <!-- ── Finance & Money ──────────────────────────── -->
-        <section class="category" id="finance">
+        <!-- ── Accountants & CAs ────────────────────────── -->
+        <section class="category" id="accountants">
             <div class="category-header">
-                <div class="category-icon cat-icon-finance">💰</div>
+                <div class="category-icon">💼</div>
                 <div>
-                    <div class="category-label">Finance &amp; Money</div>
-                    <div class="category-sub">Budgets, investments &amp; calculations</div>
+                    <div class="category-label">Accountants &amp; CAs</div>
+                    <div class="category-sub">Financial planning &amp; tax tools</div>
                 </div>
                 <div class="category-count">5 tools</div>
             </div>
             <div class="category-divider"></div>
             <div class="grid">
+
+                <div class="tool-card card-tax">
+                    <div class="tool-icon">🧾</div>
+                    <div class="tool-name">Tax Estimator</div>
+                    <div class="tool-desc">Quickly estimate income tax under old or new regime with a slab-by-slab breakdown.</div>
+                    <a class="tool-btn" href="./Tax%20Estimator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
 
                 <div class="tool-card card-budget">
                     <div class="tool-icon">💰</div>
@@ -408,46 +647,46 @@
                     <a class="tool-btn" href="./Currency%20Converter/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
                 </div>
 
-                <div class="tool-card card-tax">
-                    <div class="tool-icon">🧾</div>
-                    <div class="tool-name">Tax Estimator</div>
-                    <div class="tool-desc">Quickly estimate income tax under old or new regime with a slab-by-slab breakdown.</div>
-                    <a class="tool-btn" href="./Tax%20Estimator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
-                </div>
-
             </div>
         </section>
 
-        <!-- ── Daily Life ───────────────────────────────── -->
-        <section class="category" id="daily">
+        <!-- ── HR Professionals ─────────────────────────── -->
+        <section class="category" id="hrpros">
             <div class="category-header">
-                <div class="category-icon cat-icon-daily">🛍️</div>
+                <div class="category-icon">👔</div>
                 <div>
-                    <div class="category-label">Daily Life</div>
-                    <div class="category-sub">Shopping &amp; everyday essentials</div>
+                    <div class="category-label">HR Professionals</div>
+                    <div class="category-sub">Communication &amp; networking</div>
                 </div>
-                <div class="category-count">1 tool</div>
+                <div class="category-count">2 tools</div>
             </div>
             <div class="category-divider"></div>
             <div class="grid">
 
-                <div class="tool-card card-shopping">
-                    <div class="tool-icon">🛒</div>
-                    <div class="tool-name">Shopping List</div>
-                    <div class="tool-desc">Organize your grocery runs by category, check items off, and keep the pantry stocked.</div>
-                    <a class="tool-btn" href="./Shopping%20List/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                <div class="tool-card card-linkedin">
+                    <div class="tool-icon">💼</div>
+                    <div class="tool-name">LinkedIn Bio Generator</div>
+                    <div class="tool-desc">Fill in your details, pick a tone, and get 3 ready-to-use LinkedIn About sections powered by AI.</div>
+                    <a class="tool-btn" href="./LinkedIn%20Bio%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+                <div class="tool-card card-tone">
+                    <div class="tool-icon">💬</div>
+                    <div class="tool-name">Tone Checker</div>
+                    <div class="tool-desc">Paste any email or message and instantly find out if it reads as aggressive, passive, or balanced.</div>
+                    <a class="tool-btn" href="./Tone%20Checker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
                 </div>
 
             </div>
         </section>
 
-        <!-- ── Writing & Communication ──────────────────── -->
-        <section class="category" id="writing">
+        <!-- ── Marketing Professionals ───────────────────── -->
+        <section class="category" id="marketing">
             <div class="category-header">
-                <div class="category-icon cat-icon-writing">✍️</div>
+                <div class="category-icon">📢</div>
                 <div>
-                    <div class="category-label">Writing &amp; Communication</div>
-                    <div class="category-sub">Tone, clarity &amp; messaging</div>
+                    <div class="category-label">Marketing Professionals</div>
+                    <div class="category-sub">Messaging &amp; communication</div>
                 </div>
                 <div class="category-count">2 tools</div>
             </div>
@@ -471,33 +710,193 @@
             </div>
         </section>
 
+        <!-- ── Sales Professionals ───────────────────────── -->
+        <section class="category" id="sales">
+            <div class="category-header">
+                <div class="category-icon">🤝</div>
+                <div>
+                    <div class="category-label">Sales Professionals</div>
+                    <div class="category-sub">Communication &amp; networking</div>
+                </div>
+                <div class="category-count">2 tools</div>
+            </div>
+            <div class="category-divider"></div>
+            <div class="grid">
+
+                <div class="tool-card card-linkedin">
+                    <div class="tool-icon">💼</div>
+                    <div class="tool-name">LinkedIn Bio Generator</div>
+                    <div class="tool-desc">Fill in your details, pick a tone, and get 3 ready-to-use LinkedIn About sections powered by AI.</div>
+                    <a class="tool-btn" href="./LinkedIn%20Bio%20Generator/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+                <div class="tool-card card-tone">
+                    <div class="tool-icon">💬</div>
+                    <div class="tool-name">Tone Checker</div>
+                    <div class="tool-desc">Paste any email or message and instantly find out if it reads as aggressive, passive, or balanced.</div>
+                    <a class="tool-btn" href="./Tone%20Checker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Lawyers ───────────────────────────────────── -->
+        <section class="category" id="lawyers">
+            <div class="category-header">
+                <div class="category-icon">⚖️</div>
+                <div>
+                    <div class="category-label">Lawyers</div>
+                    <div class="category-sub">Precision in communication</div>
+                </div>
+                <div class="category-count">1 tool</div>
+            </div>
+            <div class="category-divider"></div>
+            <div class="grid">
+
+                <div class="tool-card card-tone">
+                    <div class="tool-icon">💬</div>
+                    <div class="tool-name">Tone Checker</div>
+                    <div class="tool-desc">Paste any email or message and instantly find out if it reads as aggressive, passive, or balanced.</div>
+                    <a class="tool-btn" href="./Tone%20Checker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Doctors ───────────────────────────────────── -->
+        <section class="category" id="doctors">
+            <div class="category-header">
+                <div class="category-icon">🏥</div>
+                <div>
+                    <div class="category-label">Doctors</div>
+                    <div class="category-sub">Health &amp; wellness</div>
+                </div>
+                <div class="category-count">2 tools</div>
+            </div>
+            <div class="category-divider"></div>
+            <div class="grid">
+
+                <div class="tool-card card-water">
+                    <div class="tool-icon">💧</div>
+                    <div class="tool-name">Water Intake</div>
+                    <div class="tool-desc">Track your daily hydration, hit your water goals, and build a healthy habit one sip at a time.</div>
+                    <a class="tool-btn" href="./Water%20Intake%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+                <div class="tool-card card-meal">
+                    <div class="tool-icon">🍽️</div>
+                    <div class="tool-name">Meal Planner</div>
+                    <div class="tool-desc">Plan your weekly meals ahead of time, reduce food waste, and make grocery runs effortless.</div>
+                    <a class="tool-btn" href="./Meal%20Planner/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Teachers ─────────────────────────────────── -->
+        <section class="category" id="teachers">
+            <div class="category-header">
+                <div class="category-icon">🎓</div>
+                <div>
+                    <div class="category-label">Teachers</div>
+                    <div class="category-sub">Planning &amp; productivity</div>
+                </div>
+                <div class="category-count">3 tools</div>
+            </div>
+            <div class="category-divider"></div>
+            <div class="grid">
+
+                <div class="tool-card card-todo">
+                    <div class="tool-icon">✅</div>
+                    <div class="tool-name">To‑Do Checklist</div>
+                    <div class="tool-desc">Capture tasks instantly, tick them off one by one, and never let anything slip through the cracks.</div>
+                    <a class="tool-btn" href="./To%20do%20checklist/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+                <div class="tool-card card-goal">
+                    <div class="tool-icon">🎯</div>
+                    <div class="tool-name">Goal Tracker</div>
+                    <div class="tool-desc">Set ambitious long-term goals, break them into milestones, and watch your progress grow over time.</div>
+                    <a class="tool-btn" href="./Goal%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+                <div class="tool-card card-pomodoro">
+                    <div class="tool-icon">🍅</div>
+                    <div class="tool-name">Pomodoro Tracker</div>
+                    <div class="tool-desc">Stay deep in focus. Work in sprints, rest with intent, and get more done without burning out.</div>
+                    <a class="tool-btn" href="./Pomodoro%20Tracker/index.html">Open <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Engineers ────────────────────────────────── -->
+        <!-- (Empty - no specific tools for this group yet) -->
+
     </div>
 
     <footer class="footer">Tools for Fools &nbsp;·&nbsp; All data stays on your device</footer>
 
     <script>
-        function jumpTo(id, btn) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const top = el.getBoundingClientRect().top + window.scrollY - 24;
-            window.scrollTo({ top, behavior: 'smooth' });
+        let allTools = [];
 
-            document.querySelectorAll('.cat-nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function showProf(id) {
+            document.querySelectorAll('.category').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.prof-tab').forEach(btn => btn.classList.remove('active'));
+
+            const target = document.getElementById(id);
+            const btn = document.querySelector(`button[onclick="showProf('${id}')"]`);
+
+            if (target) target.classList.add('active');
+            if (btn) btn.classList.add('active');
+            document.getElementById('searchInput').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Highlight active nav on scroll
-        const sections = ['productivity','health','finance','daily','writing'];
-        window.addEventListener('scroll', () => {
-            let current = sections[0];
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.getBoundingClientRect().top <= 80) current = id;
+        function showAll() {
+            document.querySelectorAll('.category').forEach(el => el.classList.add('active'));
+            document.querySelectorAll('.prof-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`button[onclick="showAll()"]`).classList.add('active');
+            document.getElementById('searchInput').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            menuBtn.classList.toggle('active');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            if (!menuBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                menuBtn.classList.remove('active');
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        function searchTools() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+
+            if (query === '') {
+                cards.forEach(card => card.style.display = '');
+                return;
+            }
+
+            cards.forEach(card => {
+                const name = card.querySelector('.tool-name').textContent.toLowerCase();
+                const desc = card.querySelector('.tool-desc').textContent.toLowerCase();
+                const matches = name.includes(query) || desc.includes(query);
+                card.style.display = matches ? '' : 'none';
             });
-            document.querySelectorAll('.cat-nav-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', sections[i] === current);
-            });
-        }, { passive: true });
+        }
+
+        // Show all tools on load
+        showAll();
     </script>
 
 </body>

@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(cat)",
+      "Bash(bash /tmp/fix_pdf.sh)",
+      "Bash(python3)",
+      "Bash(python fix_excel_exports.py)",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\fix_excel_exports.py\")",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\fix_excel_all.py\")",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\fix_template_strings.py\")",
+      "Bash(grep \"XLSX.writeFile\" \"C:\\\\Users\\\\Admin\\\\Downloads\\\\Websites\\\\Tools for Fools\\\\Project Manager Tools\\\\\"{Business Case Builder,Escalation Matrix Builder,RACI Matrix Creator}\"/index.html)",
+      "Bash(python -m py_compile \"C:\\\\Users\\\\Admin\\\\Downloads\\\\Websites\\\\Tools for Fools\\\\Project Manager Tools\\\\Scope Statement Tool\\\\index.html\")",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\fix_corrupted_files.py\")",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\fix_missing_braces.py\")",
+      "Bash(python \"C:\\\\Users\\\\Admin\\\\Downloads\\\\complete_fix.py\")",
+      "Bash(find . -name \"index.html\" -exec grep -l \"function resetForm\\(\\)\" {} \\\\;)",
+      "Bash(python comprehensive_repair.py)",
+      "Bash(python full_restoration.py)",
+      "Bash(python fix_generation_bug.py)",
+      "Bash(python remove_excel_improve_reports.py)",
+      "Bash(python enhance_report_quality.py)",
+      "Bash(python3 fix_label_selector.py)",
+      "Bash(python3 comprehensive_fix_all_tools.py)",
+      "WebSearch",
+      "Bash(python3 update_document_formatting_standards.py)",
+      "Bash(python3 fix_document_formatting_syntax.py)",
+      "Bash(python3 restore_and_style_documents.py)",
+      "Bash(awk '{print $NF}')"
+    ]
+  }
+}
